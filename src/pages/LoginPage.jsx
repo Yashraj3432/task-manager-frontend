@@ -1,10 +1,12 @@
 import { useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,9 +17,12 @@ function LoginPage() {
                 password,
             });
 
-            console.log(response.data);
+            localStorage.setItem(
+                "user",
+                JSON.stringify(response.data)
+            );
 
-            alert(`Welcome ${response.data.name}!`);
+            navigate("/dashboard");
 
         } catch (error) {
             alert(error.response?.data?.message || "Login failed");
