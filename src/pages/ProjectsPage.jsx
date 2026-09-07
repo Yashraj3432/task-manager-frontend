@@ -3,45 +3,64 @@ import api from "../services/api";
 
 function ProjectsPage() {
 
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [projects, setProjects] = useState([]);
+    const [projects,setProjects]=useState([]);
 
-    const loadProjects = async () => {
-        const response = await api.get("/projects");
+    const [name,setName]=useState("");
+    const [description,setDescription]=useState("");
+
+    const loadProjects=async()=>{
+
+        const response=await api.get("/projects");
+
         setProjects(response.data);
+
     };
 
-    useEffect(() => {
-        loadProjects();
-    }, []);
+    useEffect(()=>{
 
-    const handleSubmit = async (e) => {
+        loadProjects();
+
+    },[]);
+
+    const handleSubmit=async(e)=>{
+
         e.preventDefault();
 
-        await api.post("/projects", {
+        await api.post("/projects",{
             name,
-            description,
+            description
         });
 
         setName("");
         setDescription("");
 
         loadProjects();
+
     };
 
-    return (
-        <div>
-            <h1>Projects</h1>
+    return(
 
-            <form onSubmit={handleSubmit}>
+        <div className="container page">
+
+            <div className="page-header">
+
+                <h1>Projects</h1>
+
+                <p>Create and organize your workspaces</p>
+
+            </div>
+
+            <form
+                className="project-form"
+                onSubmit={handleSubmit}
+            >
+
                 <input
-                    placeholder="Project Name"
+                    placeholder="Project name"
                     value={name}
                     onChange={(e)=>setName(e.target.value)}
+                    required
                 />
-
-                <br/><br/>
 
                 <input
                     placeholder="Description"
@@ -49,22 +68,47 @@ function ProjectsPage() {
                     onChange={(e)=>setDescription(e.target.value)}
                 />
 
-                <br/><br/>
+                <button className="btn-primary">
+                    Create
+                </button>
 
-                <button>Create Project</button>
             </form>
 
-            <hr/>
+            <div className="project-grid">
 
-            {projects.map(project => (
-                <div key={project.id}>
-                    <h3>{project.name}</h3>
-                    <p>{project.description}</p>
-                </div>
-            ))}
+                {projects.map(project=>(
+
+                    <div
+                        className="project-card"
+                        key={project.id}
+                    >
+
+                        <h3>{project.name}</h3>
+
+                        <p>{project.description}</p>
+
+                        <div className="project-footer">
+
+              <span className="project-id">
+                #{project.id}
+              </span>
+
+                            <span className="badge">
+                Active
+              </span>
+
+                        </div>
+
+                    </div>
+
+                ))}
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default ProjectsPage;

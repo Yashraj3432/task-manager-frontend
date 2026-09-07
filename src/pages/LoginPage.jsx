@@ -1,12 +1,12 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
-import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,11 +17,7 @@ function LoginPage() {
                 password,
             });
 
-            localStorage.setItem(
-                "user",
-                JSON.stringify(response.data)
-            );
-
+            localStorage.setItem("user", JSON.stringify(response.data));
             navigate("/dashboard");
 
         } catch (error) {
@@ -30,30 +26,55 @@ function LoginPage() {
     };
 
     return (
-        <div>
-            <h1>Login</h1>
+        <div className="auth-page">
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e)=>setEmail(e.target.value)}
-                />
+            <div className="auth-card">
 
-                <br /><br />
+                <h1 className="auth-title">Welcome Back</h1>
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e)=>setPassword(e.target.value)}
-                />
+                <p className="auth-subtitle">
+                    Login to continue managing your projects
+                </p>
 
-                <br /><br />
+                <form onSubmit={handleSubmit}>
 
-                <button type="submit">Login</button>
-            </form>
+                    <div className="form-group">
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e)=>setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e)=>setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <button className="btn-primary" type="submit">
+                        Login
+                    </button>
+
+                </form>
+
+                <div className="auth-footer">
+                    Don't have an account?{" "}
+                    <Link to="/register">Register</Link>
+                </div>
+
+            </div>
+
         </div>
     );
 }
